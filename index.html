@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contagem Regressiva 💖</title>
+<style>
+body {
+    background: #ffeef0;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #d90429;
+    margin: 0;
+    overflow-x: hidden;
+    text-align: center;
+}
+
+/* Coração */
+.heart {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    margin: 70px auto 30px;
+    transition: transform 0.2s;
+}
+.heart svg {
+    width: 140px;
+    height: 140px;
+}
+.heart:hover { transform: scale(1.15); }
+
+/* Carta */
+.carta {
+    display: none;
+    background: #fff;
+    padding: 30px 25px;
+    border-radius: 18px;
+    box-shadow: 0 6px 20px #c9184a77;
+    max-width: 400px;
+    text-align: center;
+    font-size: 1.2em;
+    margin: 20px auto;
+}
+
+/* Pergunta e botões */
+.pergunta {
+    display: none;
+    font-size: 1.4em;
+    margin: 20px auto 12px;
+}
+.botoes {
+    display: none;
+    margin-bottom: 20px;
+}
+.botoes button {
+    padding: 12px 26px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.15em;
+    cursor: pointer;
+    transition: 0.2s;
+    margin: 0 6px;
+}
+.botoes button:hover { background: #d90429; }
+.botoes button:active { transform: scale(0.95); }
+
+.fugir-direita { animation: direita 0.6s forwards; }
+.fugir-esquerda { animation: esquerda 0.6s forwards; }
+.fugir-fora { animation: fora 0.8s forwards; }
+
+@keyframes direita { to { transform: translateX(120px); } }
+@keyframes esquerda { to { transform: translateX(-120px); } }
+@keyframes fora { to { transform: translateY(-60px) translateX(400px) scale(0.6) rotate(40deg); opacity: 0; } }
+
+/* Contagem */
+.box-contagem {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 28px #c9184a88;
+    padding: 30px 25px;
+    min-width: 280px;
+    max-width: 420px;
+    text-align: center;
+    z-index: 9999;
+}
+.contagem-titulo { font-size: 1.35em; margin-bottom: 8px; }
+.contagem-numeros { font-size: 2.1em; font-weight: bold; margin-bottom: 8px; }
+.contagem-label { font-size: 1.15em; }
+
+/* Elementos caindo */
+.caindo {
+    position: fixed;
+    top: -40px;
+    font-size: 28px;
+    pointer-events: none;
+    z-index: 1;
+    animation: cair linear infinite;
+}
+@keyframes cair { to { transform: translateY(110vh) rotate(360deg); } }
+
+/* Seção extra */
+.secao-extra {
+    padding: 40px 20px;
+}
+.secao-extra h2 { font-size:1.7em; color:#e63946; margin-bottom:14px; }
+.secao-extra p { font-size:1.25em; color:#d90429; max-width:500px; margin:0 auto 25px; }
+.secao-extra div { font-size:2.3em; }
+
+/* Responsividade */
+@media (max-width:600px){
+    body{font-size:17px;}
+    .carta{font-size:1.1em; padding:20px 15px; max-width:90%;}
+    .pergunta{font-size:1.25em;}
+    .botoes button{font-size:1em; padding:10px 20px;}
+    .contagem-titulo{font-size:1.25em;}
+    .contagem-numeros{font-size:1.8em;}
+    .contagem-label{font-size:1.1em;}
+    .secao-extra h2{font-size:1.5em;}
+    .secao-extra p{font-size:1.15em;}
+    .secao-extra div{font-size:2em;}
+    .heart svg{width:120px;height:120px;}
+}
+</style>
+</head>
+<body>
+
+<div id="heart" class="heart">
+<svg viewBox="0 0 100 100">
+<path d="M10,30 A20,20 0 0,1 50,30 A20,20 0 0,1 90,30 Q90,60 50,90 Q10,60 10,30 Z" fill="#e63946"/>
+</svg>
+</div>
+
+<div class="carta" id="carta">
+<strong>Para o amor da minha vida 💌</strong><br><br>
+Você é meu motivo de sorrir todos os dias.<br>
+Obrigado por ser tão especial.<br>
+Te amo!
+</div>
+
+<div class="pergunta" id="pergunta">Você vai me amar para sempre?</div>
+<div class="botoes" id="botoes">
+<button id="btnSim">Sim</button>
+<button id="btnNao">Não</button>
+</div>
+
+<div class="box-contagem" id="boxContagem">
+<div class="contagem-titulo">Contagem para <b>04/09/2026</b></div>
+<div class="contagem-numeros" id="contagemNumeros">00d 00h 00m 00s</div>
+<div class="contagem-label">No seu próximo aniversário a gente vai ficar grudados</div>
+</div>
+
+<div class="secao-extra">
+<h2>Mais amor aqui 💖</h2>
+<p>Mesmo quando a gente rola para baixo, o amor continua crescendo!</p>
+<div></div>
+</div>
+
+<script>
+const heart = document.getElementById('heart');
+const carta = document.getElementById('carta');
+const pergunta = document.getElementById('pergunta');
+const botoes = document.getElementById('botoes');
+const btnSim = document.getElementById('btnSim');
+const btnNao = document.getElementById('btnNao');
+const boxContagem = document.getElementById('boxContagem');
+const contagemNumeros = document.getElementById('contagemNumeros');
+
+heart.onclick = () => {
+    carta.style.display="block";
+    heart.style.display="none";
+    pergunta.style.display="block";
+    botoes.style.display="block";
+};
+
+btnNao.onclick = () => {
+    btnNao.classList.add('fugir-direita');
+    setTimeout(()=>{
+        btnNao.classList.remove('fugir-direita');
+        btnNao.classList.add('fugir-esquerda');
+        setTimeout(()=>{
+            btnNao.classList.remove('fugir-esquerda');
+            btnNao.classList.add('fugir-fora');
+            setTimeout(()=>btnNao.style.display='none',800);
+        },600);
+    },600);
+};
+
+btnSim.onclick = () => {
+    boxContagem.style.display="block";
+    atualizarContagem();
+    setInterval(atualizarContagem,1000);
+};
+
+function atualizarContagem(){
+    const alvo=new Date('2026-09-04T00:00:00');
+    const agora=new Date();
+    let diff=alvo-agora;
+    if(diff<0) diff=0;
+    const dias=Math.floor(diff/(1000*60*60*24));
+    const horas=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+    const mins=Math.floor((diff%(1000*60*60))/(1000*60));
+    const segs=Math.floor((diff%(1000*60))/1000);
+    contagemNumeros.textContent=`${dias.toString().padStart(2,'0')}d ${horas.toString().padStart(2,'0')}h ${mins.toString().padStart(2,'0')}m ${segs.toString().padStart(2,'0')}s`;
+}
+
+/* Elementos caindo */
+function criarElementoCaindo(){
+    const elem=document.createElement("div");
+    elem.classList.add("caindo");
+    const tipos=['❤️','✨','⭐','🌸'];
+    elem.textContent=tipos[Math.floor(Math.random()*tipos.length)];
+    elem.style.left=Math.random()*(window.innerWidth-32)+'px';
+    elem.style.animationDuration=(3+Math.random()*2)+'s';
+    elem.style.opacity=0.7+Math.random()*0.3;
+    document.body.appendChild(elem);
+    setTimeout(()=>elem.remove(),5000);
+}
+setInterval(criarElementoCaindo,350);
+</script>
+
+</body>
+</html>
